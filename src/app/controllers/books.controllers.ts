@@ -41,28 +41,20 @@ booksRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =>
 // Get all books or filtered books
 booksRoutes.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { filter, sortBy, sort, limit } = req.query as {
+        const { filter, sortBy = 'createAt', sort = 'asc', limit } = req.query as {
             filter?: string;
             sortBy?: string;
             sort?: 'asc' | 'desc';
             limit?: string;
         };
 
-        let query;
+        const queryObject: Record<string, any> = {};
 
-        const genreFilter = filter ? { genre: filter.toUpperCase() } : '';
+        let query = Book.find(queryObject);
 
-        const sortFilter = sortBy ? `${sort === 'desc' ? '-' : ''}${sortBy || "createdAt"}` : '';
+        if (filter) queryObject.genre = filter.toUpperCase();
 
-        if (genreFilter) {
-            query = Book.find(genreFilter);
-        } else {
-            query = Book.find();
-        }
-
-        if (sortFilter) {
-            query.sort(sortFilter);
-        }
+        query = query.sort({ [sortBy]: sort === 'desc' ? -1 : 1 });
 
         if (limit && !isNaN(Number(limit))) {
             query.limit(Number(limit));
