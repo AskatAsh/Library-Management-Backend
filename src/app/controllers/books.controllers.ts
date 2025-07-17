@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import z from 'zod';
 import { Book } from '../models/books.models';
 
@@ -10,7 +10,7 @@ const booksZodSchema = z.object(
         title: z.string(),
         author: z.string(),
         genre: z.string(),
-        isbn: z.string(),
+        isbn: z.string().optional(),
         description: z.string().optional(),
         copies: z.number(),
         available: z.boolean().optional()
@@ -18,7 +18,7 @@ const booksZodSchema = z.object(
 )
 
 // Create book
-booksRoutes.post('/', async (req: Request, res: Response) => {
+booksRoutes.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         // validate request body with zod schema
         const body = await booksZodSchema.parseAsync(req.body);
@@ -34,11 +34,7 @@ booksRoutes.post('/', async (req: Request, res: Response) => {
         })
     } catch (error: any) {
         // error status and error data
-        res.status(500).json({
-            success: false,
-            message: error?.message || "Internal server error creating books.",
-            error: error,
-        })
+        next(error);
     }
 })
 
