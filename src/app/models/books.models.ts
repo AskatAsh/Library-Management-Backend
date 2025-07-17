@@ -32,7 +32,7 @@ const booksSchema = new Schema<IBooks>({
         type: Number,
         validate: {
             validator: function (v) {
-                return v! < 0;
+                return v >= 0;
             },
             message: props => `Copies cannot be negative. Got ${props.value}`
         }
