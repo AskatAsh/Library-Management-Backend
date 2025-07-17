@@ -1,19 +1,30 @@
 import express, { NextFunction, Request, Response } from 'express';
+import z from 'zod';
 import { Book } from '../models/books.models';
 import { Borrow } from '../models/borrow.models';
 
 export const borrowRoutes = express.Router();
 
+const borrowZodSchema = z.object({
+    book: z.string(),
+    quantity: z.number(),
+    dueDate: z.string()
+})
+
 // borrow book
 borrowRoutes.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // todos
-        // Verify the book has enough available copies. ✔
-        // Deduct the requested quantity from the book’s copies. ✔
-        // If copies become 0, update available to false (implement this using a static method or instance method). ✔
-        // Save the borrow record with all relevant details. ✔
+        const body = await borrowZodSchema.parseAsync(req.body);
+        const { book, quantity, dueDate } = body;
 
-        const { book, quantity, dueDate } = req.body
+        console.log(quantity);
+
+        if (!quantity || !(quantity >= 0)) {
+            return res.status(500).json({
+                success: false,
+                message: "Invalid quantity! Make sure quantity is not zero or string",
+            });
+        }
 
         const bookData = await Book.findById(book);
 
@@ -41,7 +52,6 @@ borrowRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =
 
         // update available and copies data in books collection
         const updateResult = await Borrow.updateAvailable(bookData._id.toString(), newCopies);
-        console.log(updateResult);
 
         // Save the borrow record
         const savedBorrowResult = await Borrow.create({ book, quantity, dueDate });
