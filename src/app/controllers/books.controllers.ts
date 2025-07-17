@@ -73,3 +73,40 @@ booksRoutes.get('/:bookId', async (req: Request, res: Response, next: NextFuncti
         next(error)
     }
 })
+
+// Update a book
+booksRoutes.put('/:bookId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const bookId = req.params.bookId;
+        const updateData = req.body;
+
+        const updateResult = await Book.findByIdAndUpdate(bookId, updateData, { new: true });
+
+        res.status(200).json({
+            success: true,
+            message: "Book updated successfully",
+            data: updateResult
+        })
+
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Delete a book
+booksRoutes.delete('/:bookId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const bookId = req.params.bookId;
+
+        const deleteResult = await Book.findByIdAndDelete(bookId);
+
+        res.status(200).json({
+            success: true,
+            message: "Book deleted successfully",
+            data: deleteResult
+        })
+
+    } catch (error) {
+        next(error)
+    }
+})
