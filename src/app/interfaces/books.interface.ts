@@ -1,4 +1,4 @@
-interface IBooks {
+export interface IBooks {
     title: string,
     author: string,
     genre: "FICTION" | "NON_FICTION" | "SCIENCE" | "HISTORY" | "BIOGRAPHY" | "FANTASY",
