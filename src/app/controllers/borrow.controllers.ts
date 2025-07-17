@@ -37,12 +37,11 @@ borrowRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =
         const newCopies = availableCopies - quantity;
 
         // update copies in books collection with deducted copies
-        const updateCopiesResult = await Book.findByIdAndUpdate(book, { copies: newCopies })
+        // const updateCopiesResult = await Book.findByIdAndUpdate(book, { copies: newCopies })
 
-        if (newCopies === 0) {
-            // update available data in books collection
-            const updateAvailableResult = await Borrow.updateAvailable(bookData._id.toString());
-        }
+        // update available and copies data in books collection
+        const updateResult = await Borrow.updateAvailable(bookData._id.toString(), newCopies);
+        console.log(updateResult);
 
         // Save the borrow record
         const savedBorrowResult = await Borrow.create({ book, quantity, dueDate });

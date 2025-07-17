@@ -22,8 +22,8 @@ const borrowSchema = new Schema<IBorrow, IBorrowStaticMethods>({
 })
 
 // static method
-borrowSchema.static('updateAvailable', async function (bookId, next) {
-    const result = await Book.findByIdAndUpdate(bookId, { available: false });
+borrowSchema.static('updateAvailable', async function (bookId, newCopies) {
+    const result = await Book.findByIdAndUpdate(bookId, { available: newCopies > 0, copies: newCopies });
     return result;
 })
 

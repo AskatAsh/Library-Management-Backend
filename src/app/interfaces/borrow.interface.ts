@@ -7,7 +7,7 @@ export interface IBorrow {
 }
 
 export interface IBorrowStaticMethods extends Model<IBorrow> {
-    updateAvailable(bookId: string): unknown
+    updateAvailable(bookId: string, newCopies: number): unknown
 }
 
 // book (objectId) — Mandatory. References the borrowed book’s ID.
