@@ -21,4 +21,4 @@ async function main() {
 }
 main();
 
-// todo: create database and connect to mongodb
+// todo: Setup routes
