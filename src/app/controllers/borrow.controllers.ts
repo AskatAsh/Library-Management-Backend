@@ -17,8 +17,6 @@ borrowRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =
         const body = await borrowZodSchema.parseAsync(req.body);
         const { book, quantity, dueDate } = body;
 
-        console.log(quantity);
-
         if (!quantity || !(quantity >= 0)) {
             return res.status(500).json({
                 success: false,
@@ -67,9 +65,55 @@ borrowRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =
     }
 })
 
-borrowRoutes.get('/', (req: Request, res: Response) => {
-    res.status(200).json({
-        success: true,
-        message: "Borrowed books summary retrieved successfully",
-    })
+borrowRoutes.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const borrowdBooksSummery = await Borrow.aggregate(
+            [
+                {
+                    $lookup: {
+                        from: "books",
+                        localField: "book",
+                        foreignField: "_id",
+                        as: "book"
+                    }
+                },
+                {
+                    $unwind: "$book"
+                },
+                {
+                    $group: {
+                        _id: "$book",
+                        totalQuantity: { $sum: "$quantity" }
+                    }
+                },
+                {
+                    $project: {
+                        "totalQuantity": 1,
+                        "book": {
+                            title: "$_id.title",
+                            isbn: "$_id.isbn",
+                        },
+                        "_id": 0
+                    }
+                }
+            ]
+        );
+
+        if (!borrowdBooksSummery || borrowdBooksSummery.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No Data found! No books borrowed yet!",
+                data: borrowdBooksSummery
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Borrowed books summary retrieved successfully",
+            data: borrowdBooksSummery
+        })
+
+    } catch (error) {
+        next(error);
+    }
 })
