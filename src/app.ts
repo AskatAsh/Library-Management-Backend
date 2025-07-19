@@ -33,7 +33,11 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     res.status(error.status || 500).json({
         success: false,
         message: error?.message || "Internal Server Error! Check Error and Try Again!",
-        error
+        error: error || {
+            name: error.name || "Server Error",
+            status: error.status || 500,
+            message: error.message || "Internal Server Error! Check Error and Try Again!"
+        }
     })
 })
 export default app;

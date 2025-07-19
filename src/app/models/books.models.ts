@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { AppError } from "../errors/error.class";
 import { IBooks, IBookStaticMethods } from "../interfaces/books.interface";
 
 const booksSchema = new Schema<IBooks, IBookStaticMethods>({
@@ -49,14 +50,14 @@ const booksSchema = new Schema<IBooks, IBookStaticMethods>({
 // static method
 booksSchema.static('updateAvailable', async function (bookId, quantity) {
     if (!quantity || !(quantity >= 0)) {
-        throw new Error("Invalid quantity! Make sure quantity is not zero or string")
+        throw new AppError("Invalid quantity! Make sure quantity is not zero or string", 500, "Validation Error");
     }
 
     // find book by id provided in borrow route
     const book = await this.findById(bookId);
 
-    if (!book) throw new Error("Book not found! Try Again with another book.");
-    if (book.copies < quantity) throw new Error(`Not enough copies available. Found ${book.copies} copies.`);
+    if (!book) throw new AppError("Book not found! Try Again with another book.", 404, "Not Found");
+    if (book.copies < quantity) throw new AppError(`Not enough copies available. Found ${book.copies} copies.`, 404, "Not Available");
 
     // reduce book copies from quantity if available
     book.copies -= quantity;
