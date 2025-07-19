@@ -35,6 +35,24 @@ This backend system supports CRUD operations for books and borrowing activities.
 
 ---
 
+## 📘 API Documentation
+
+> Backend server URL: https://library-management-backend-gamma.vercel.app
+
+### Sample Endpoints
+
+- `GET /api/books` – Get all books (max 10 by default)
+- `GET /api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5` – Get books using filter, sort and limit
+- `POST /api/books` – Add a new book
+- `PUT /api/books/:bookId` – Update a book
+- `DELETE /api/books/:bookId` – Remove a book
+- `POST /api/borrow` – Borrow a book
+- `GET /api/borrow` – Borrow book summery
+
+Use Postman or Swagger for API testing and exploration.
+
+---
+
 ## 📦 Dependencies
 
 ### Core Dependencies
@@ -117,22 +135,6 @@ src/
 ├── app.ts               # Express app configuration
 └── server.ts            # Server entry point
 ```
-
----
-
-## 📘 API Documentation
-
-### Sample Endpoints
-
-- `GET /api/books` – Get all books (max 10 by default)
-- `GET /api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5` – Get books using filter, sort and limit
-- `POST /api/books` – Add a new book
-- `PUT /api/books/:bookId` – Update a book
-- `DELETE /api/books/:bookId` – Remove a book
-- `POST /api/borrow` – Borrow a book
-- `GET /api/borrow` – Borrow book summery
-
-Use Postman or Swagger for API testing and exploration.
 
 ---
 
