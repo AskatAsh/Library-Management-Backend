@@ -42,14 +42,19 @@ This backend system supports CRUD operations for books and borrowing activities.
 - "dotenv": "^17.2.0",
 - "express": "^5.1.0",
 - "mongoose": "^8.16.4",
-- "zod": "^4.0.5"
+- "zod": "^4.0.5",
+- "isbn3": "^1.2.12"
 
 ### Dev Dependencies
 
+- "@eslint/js": "^9.31.0",
 - "@types/express": "^5.0.3",
 - "@types/node": "^24.0.14",
+- "eslint": "^9.31.0",
+- "globals": "^16.3.0",
 - "ts-node-dev": "^2.0.0",
-- "typescript": "^5.8.3"
+- "typescript": "^5.8.3",
+- "typescript-eslint": "^8.37.0"
 
 ---
 
