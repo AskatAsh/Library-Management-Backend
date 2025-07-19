@@ -1,32 +1,32 @@
-import { model, Schema } from "mongoose";
-import { AppError } from "../errors/error.class";
-import { IBooks, IBookStaticMethods } from "../interfaces/books.interface";
+import { model, Schema } from 'mongoose';
+import { AppError } from '../errors/error.class';
+import { IBooks, IBookStaticMethods } from '../interfaces/books.interface';
 
 const booksSchema = new Schema<IBooks, IBookStaticMethods>({
     title: {
         type: String,
-        required: [true, "Book title required. Add a book title."],
+        required: [true, 'Book title required. Add a book title.'],
         trim: true
     },
     author: {
         type: String,
-        required: [true, "Book author name required. Add author name."],
+        required: [true, 'Book author name required. Add author name.'],
         trim: true
     },
     genre: {
         type: String,
-        required: [true, "Book genre required. Add a genre (FICTION, NON_FICTION, SCIENCE, HISTORY, BIOGRAPHY, FANTASY)"],
-        enum: ["FICTION", "NON_FICTION", "SCIENCE", "HISTORY", "BIOGRAPHY", "FANTASY"],
+        required: [true, 'Book genre required. Add a genre (FICTION, NON_FICTION, SCIENCE, HISTORY, BIOGRAPHY, FANTASY)'],
+        enum: ['FICTION', 'NON_FICTION', 'SCIENCE', 'HISTORY', 'BIOGRAPHY', 'FANTASY'],
         uppercase: true
     },
     isbn: {
         type: String,
-        required: [true, "Book ISBN required."],
+        required: [true, 'Book ISBN required.'],
         unique: true
     },
     description: {
         type: String,
-        default: "",
+        default: '',
         trim: true
     },
     copies: {
@@ -45,26 +45,26 @@ const booksSchema = new Schema<IBooks, IBookStaticMethods>({
 }, {
     versionKey: false,
     timestamps: true
-})
+});
 
 // static method
 booksSchema.static('updateAvailable', async function (bookId, quantity) {
     if (!quantity || !(quantity >= 0)) {
-        throw new AppError("Invalid quantity! Make sure quantity is not zero or string", 500, "Validation Error");
+        throw new AppError('Invalid quantity! Make sure quantity is not zero or string', 500, 'Validation Error');
     }
 
     // find book by id provided in borrow route
     const book = await this.findById(bookId);
 
-    if (!book) throw new AppError("Book not found! Try Again with another book.", 404, "Not Found");
-    if (book.copies < quantity) throw new AppError(`Not enough copies available. Found ${book.copies} copies.`, 404, "Not Available");
+    if (!book) throw new AppError('Book not found! Try Again with another book.', 404, 'Not Found');
+    if (book.copies < quantity) throw new AppError(`Not enough copies available. Found ${book.copies} copies.`, 404, 'Not Available');
 
     // reduce book copies from quantity if available
     book.copies -= quantity;
     if (book.copies === 0) book.available = false;
 
     await book.save();
-})
+});
 
 // pre save hook for isbn validation using isbn3 (optional)
 

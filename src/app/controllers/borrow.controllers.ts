@@ -8,7 +8,7 @@ const borrowZodSchema = z.object({
     book: z.string(),
     quantity: z.number(),
     dueDate: z.string()
-})
+});
 
 // borrow book
 borrowRoutes.post('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -55,14 +55,14 @@ borrowRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =
 
         res.status(201).json({
             success: true,
-            message: "Book borrowed successfully",
+            message: 'Book borrowed successfully',
             data: savedBorrowResult
-        })
+        });
 
     } catch (error) {
         next(error);
     }
-})
+});
 
 borrowRoutes.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -70,29 +70,29 @@ borrowRoutes.get('/', async (req: Request, res: Response, next: NextFunction) =>
             [
                 {
                     $lookup: {
-                        from: "books",
-                        localField: "book",
-                        foreignField: "_id",
-                        as: "book"
+                        from: 'books',
+                        localField: 'book',
+                        foreignField: '_id',
+                        as: 'book'
                     }
                 },
                 {
-                    $unwind: "$book"
+                    $unwind: '$book'
                 },
                 {
                     $group: {
-                        _id: "$book",
-                        totalQuantity: { $sum: "$quantity" }
+                        _id: '$book',
+                        totalQuantity: { $sum: '$quantity' }
                     }
                 },
                 {
                     $project: {
-                        "totalQuantity": 1,
-                        "book": {
-                            title: "$_id.title",
-                            isbn: "$_id.isbn",
+                        'totalQuantity': 1,
+                        'book': {
+                            title: '$_id.title',
+                            isbn: '$_id.isbn',
                         },
-                        "_id": 0
+                        '_id': 0
                     }
                 }
             ]
@@ -101,18 +101,18 @@ borrowRoutes.get('/', async (req: Request, res: Response, next: NextFunction) =>
         if (!borrowdBooksSummery || borrowdBooksSummery.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: "No Data found! No books borrowed yet!",
+                message: 'No Data found! No books borrowed yet!',
                 data: borrowdBooksSummery
-            })
+            });
         }
 
         res.status(200).json({
             success: true,
-            message: "Borrowed books summary retrieved successfully",
+            message: 'Borrowed books summary retrieved successfully',
             data: borrowdBooksSummery
-        })
+        });
 
     } catch (error) {
         next(error);
     }
-})
+});

@@ -1,6 +1,6 @@
-import { model, Schema } from "mongoose";
-import { IBorrow } from "../interfaces/borrow.interface";
-import { Book } from "./books.models";
+import { model, Schema } from 'mongoose';
+import { IBorrow } from '../interfaces/borrow.interface';
+import { Book } from './books.models';
 
 const borrowSchema = new Schema<IBorrow>({
     book: {
@@ -19,15 +19,15 @@ const borrowSchema = new Schema<IBorrow>({
 }, {
     versionKey: false,
     timestamps: true
-})
+});
 
 borrowSchema.pre('save', async function (next) {
     try {
         await Book.updateAvailable(this.book, this.quantity);
         next();
-    } catch (error: any) {
-        next(error);
+    } catch (error: unknown) {
+        next(error as Error);
     }
-})
+});
 
 export const Borrow = model<IBorrow>('Borrow', borrowSchema);

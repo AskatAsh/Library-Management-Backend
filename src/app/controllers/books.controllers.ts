@@ -15,7 +15,7 @@ const booksZodSchema = z.object(
         copies: z.number(),
         available: z.boolean().optional()
     }
-)
+);
 
 // Create book
 booksRoutes.post('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -29,14 +29,14 @@ booksRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =>
         // response status and response data
         res.status(201).json({
             success: true,
-            message: "Book created successfully",
+            message: 'Book created successfully',
             data: book
-        })
-    } catch (error: any) {
+        });
+    } catch (error) {
         // error status and error data
         next(error);
     }
-})
+});
 
 // Get all books or filtered books
 booksRoutes.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -48,7 +48,7 @@ booksRoutes.get('/', async (req: Request, res: Response, next: NextFunction) => 
             limit?: string;
         };
 
-        const queryObject: Record<string, any> = {};
+        const queryObject: Record<string, unknown> = {};
 
         let query = Book.find(queryObject);
 
@@ -64,14 +64,14 @@ booksRoutes.get('/', async (req: Request, res: Response, next: NextFunction) => 
 
         res.status(200).json({
             success: true,
-            message: "Books retrieved successfully",
+            message: 'Books retrieved successfully',
             data: books
-        })
+        });
 
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 // Get book by id
 booksRoutes.get('/:bookId', async (req: Request, res: Response, next: NextFunction) => {
@@ -82,14 +82,14 @@ booksRoutes.get('/:bookId', async (req: Request, res: Response, next: NextFuncti
 
         res.status(200).json({
             success: true,
-            message: "Book retrieved successfully",
+            message: 'Book retrieved successfully',
             data: book
-        })
+        });
 
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 // Update a book
 booksRoutes.put('/:bookId', async (req: Request, res: Response, next: NextFunction) => {
@@ -101,14 +101,14 @@ booksRoutes.put('/:bookId', async (req: Request, res: Response, next: NextFuncti
 
         res.status(200).json({
             success: true,
-            message: "Book updated successfully",
+            message: 'Book updated successfully',
             data: updateResult
-        })
+        });
 
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 // Delete a book
 booksRoutes.delete('/:bookId', async (req: Request, res: Response, next: NextFunction) => {
@@ -119,11 +119,11 @@ booksRoutes.delete('/:bookId', async (req: Request, res: Response, next: NextFun
 
         res.status(200).json({
             success: true,
-            message: "Book deleted successfully",
+            message: 'Book deleted successfully',
             data: deleteResult
-        })
+        });
 
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});

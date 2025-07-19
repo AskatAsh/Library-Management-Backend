@@ -1,13 +1,17 @@
 export class AppError extends Error {
     status: number;
-    name: string;
 
-    constructor(message: string, status: number, name: string) {
+    constructor(message: string, status: number = 500, name: string = 'Server Error') {
         super(message);
-        this.status = status;
-        this.name = name;
 
-        Error.captureStackTrace(this, this.constructor);
+        this.name = name;
+        this.status = status;
+
+        Object.setPrototypeOf(this, new.target.prototype);
+
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, this.constructor);
+        }
     }
 
     toJSON() {
