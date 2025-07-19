@@ -119,8 +119,8 @@ src/
 
 ### Sample Endpoints
 
-- `GET /api/books` – Get all books
-- `GET /api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5` – Get books using filter
+- `GET /api/books` – Get all books (max 10 by default)
+- `GET /api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5` – Get books using filter, sort and limit
 - `POST /api/books` – Add a new book
 - `PUT /api/books/:bookId` – Update a book
 - `DELETE /api/books/:bookId` – Remove a book

@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
-import { IBooks } from "../interfaces/books.interface";
+import { IBooks, IBookStaticMethods } from "../interfaces/books.interface";
 
-const booksSchema = new Schema<IBooks>({
+const booksSchema = new Schema<IBooks, IBookStaticMethods>({
     title: {
         type: String,
         required: [true, "Book title required. Add a book title."],
@@ -46,4 +46,35 @@ const booksSchema = new Schema<IBooks>({
     timestamps: true
 })
 
-export const Book = model('Book', booksSchema);
+// static method
+booksSchema.static('updateAvailable', async function (bookId, quantity) {
+    if (!quantity || !(quantity >= 0)) {
+        throw new Error("Invalid quantity! Make sure quantity is not zero or string")
+    }
+
+    // find book by id provided in borrow route
+    const book = await this.findById(bookId);
+
+    if (!book) throw new Error("Book not found! Try Again with another book.");
+    if (book.copies < quantity) throw new Error(`Not enough copies available. Found ${book.copies} copies.`);
+
+    // reduce book copies from quantity if available
+    book.copies -= quantity;
+    if (book.copies === 0) book.available = false;
+
+    await book.save();
+})
+
+// pre save hook for isbn validation using isbn3 (optional)
+
+// booksSchema.pre('save', function (next) {
+//     const isValidIsbn = ISBN.parse(this.isbn);
+//     if (isValidIsbn?.isValid || isValidIsbn?.isIsbn13 || isValidIsbn?.isIsbn10) {
+//         next();
+//     } else {
+//         const err = new Error('Invalid ISBN number provided. Add 13 or 10 digit ISBN with 978 prefix.');
+//         next(err);
+//     }
+// })
+
+export const Book = model<IBooks, IBookStaticMethods>('Book', booksSchema);

@@ -1,8 +1,8 @@
 import { model, Schema } from "mongoose";
-import { IBorrow, IBorrowStaticMethods } from "../interfaces/borrow.interface";
+import { IBorrow } from "../interfaces/borrow.interface";
 import { Book } from "./books.models";
 
-const borrowSchema = new Schema<IBorrow, IBorrowStaticMethods>({
+const borrowSchema = new Schema<IBorrow>({
     book: {
         type: Schema.Types.ObjectId,
         ref: 'Book',
@@ -21,10 +21,13 @@ const borrowSchema = new Schema<IBorrow, IBorrowStaticMethods>({
     timestamps: true
 })
 
-// static method
-borrowSchema.static('updateAvailable', async function (bookId, newCopies) {
-    const result = await Book.findByIdAndUpdate(bookId, { available: newCopies > 0, copies: newCopies });
-    return result;
+borrowSchema.pre('save', async function (next) {
+    try {
+        await Book.updateAvailable(this.book, this.quantity);
+        next();
+    } catch (error: any) {
+        next(error);
+    }
 })
 
-export const Borrow = model<IBorrow, IBorrowStaticMethods>('Borrow', borrowSchema);
+export const Borrow = model<IBorrow>('Borrow', borrowSchema);

@@ -9,6 +9,7 @@
   "dependencies": {
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "isbn3": "^1.2.12",
     "mongoose": "^8.16.4",
     "zod": "^4.0.5"
   },
