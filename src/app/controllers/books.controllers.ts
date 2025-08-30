@@ -41,7 +41,7 @@ booksRoutes.post('/', async (req: Request, res: Response, next: NextFunction) =>
 // Get all books or filtered books
 booksRoutes.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { filter, sortBy = 'createAt', sort = 'asc', limit = '10' } = req.query as {
+        const { filter, sortBy = 'createAt', sort = 'asc', limit = '' } = req.query as {
             filter?: string;
             sortBy?: string;
             sort?: 'asc' | 'desc';
