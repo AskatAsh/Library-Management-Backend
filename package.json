@@ -10,6 +10,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "global": "^4.4.0",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.14",
     "eslint": "^9.31.0",
